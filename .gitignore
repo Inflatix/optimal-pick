@@ -1,0 +1,39 @@
+# ===== PYTHON (Backend) =====
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.db
+*.db-backup
+.env
+
+# ===== NODE (Frontend) =====
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/*.local
+
+# ===== LOGS =====
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ===== EDITOR =====
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+
+# ===== EXTRA =====
+backend.zip
+frontend.zip
