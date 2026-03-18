@@ -70,39 +70,3 @@ const emit = defineEmits(['select', 'remove', 'drag-start', 'drop-slot']);
   </div>
 </template>
 
-<!---
-<template>
-  <div 
-    :draggable="!!champion"
-    @dragstart="$emit('drag-start')"
-    @dragover.prevent
-    @dragenter.prevent
-    @drop="$emit('drop-slot')"
-    @click="$emit('select')"
-    class="relative w-24 h-32 bg-gray-800 border-2 cursor-pointer flex flex-col items-center justify-center m-1"
-    :class="[
-      isActive 
-        ? 'border-teal-400 ring-2 ring-teal-400/50 shadow-[0_0_15px_rgba(45,212,191,0.5)] scale-105 z-10' 
-        : (isEnemy ? 'border-red-900/80' : 'border-blue-900/50')
-    ]"
-  > 
-
-    <button 
-      v-if="champion"
-      @click.stop="$emit('remove')"
-      class="absolute -top-2 -right-2 bg-slate-700 hover:bg-slate-500 text-slate-300 hover:text-white rounded-full w-5 h-5 text-[10px] flex items-center justify-center z-10 shadow-lg border border-white/20"
-    >
-      ✕
-    </button>
-
-    <div class="text-[10px] text-gray-400 uppercase">{{ roleLabel }}</div>
-
-    <img v-if="champion" :src="champion.imageUrl" class="w-full h-full object-cover" />
-    <div v-else class="text-3xl text-gray-600 font-bold">+</div>
-
-    <div class="text-[11px] text-white mt-1">
-      {{ champion ? champion.name : 'Pick' }}
-    </div>
-  </div>
-</template>
--->

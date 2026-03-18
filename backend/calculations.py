@@ -61,7 +61,6 @@ def get_weights(role):
         case "support":
             values = [0.7, 1.5, 1.2, 1.7, 1.0, 0.5, 1.2, 1.0, 1.7, 2.0]
     
-    # Verbindet die Namen mit den Werten: {"team_top": 1.0, "team_jungle": 1.5, ...}
     return dict(zip(roles, values))
 
 

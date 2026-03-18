@@ -35,7 +35,7 @@ def get_recommendation():
         })
     
     except Exception as e: 
-        print(f"ERROR: {e}") # Damit du im Terminal siehst, was schiefläuft!
+        print(f"ERROR: {e}") 
         return jsonify({"status": "error", "message": str(e)}), 500
 
 

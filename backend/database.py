@@ -12,7 +12,6 @@ def init_db():
     conn = get_connection()
     cursor = conn.cursor()
 
-    # 1. Tabellen erstellen
     cursor.executescript('''
         -- Stammdaten der Champions
         CREATE TABLE IF NOT EXISTS Champions (
@@ -58,7 +57,6 @@ def init_db():
         );
     ''')
 
-    # 2. Trigger erstellen (für automatische Timestamps bei UPDATES)
     cursor.executescript('''
         -- Trigger für Matchups
         CREATE TRIGGER IF NOT EXISTS tr_update_matchups_timestamp 
@@ -83,12 +81,10 @@ def init_db():
     conn.close()
     print("Datenbank erfolgreich initialisiert.")
 
-# Hilfsfunktionen zum Speichern der Daten
 def save_champion_data(champ_id, name):
     conn = get_connection()
     cursor = conn.cursor()
     
-    # Champion in Stammdaten
     cursor.execute("INSERT OR REPLACE INTO Champions (champ_id, name) VALUES (?, ?)", (champ_id, name))
     
     conn.commit()

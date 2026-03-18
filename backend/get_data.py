@@ -236,8 +236,6 @@ def get_all_enemy_matchups():
 
 
 if __name__ == "__main__":
-    # --- BEISPIEL FÜR DEN ABALUF ---
-    # 1. Daten einmalig vorbereiten
     get_id_and_name()
     print("ID and Name Done")
     get_main_roles()
@@ -247,12 +245,3 @@ if __name__ == "__main__":
     get_all_enemy_matchups()
     print("Matchup Done")
 
-#    id_to_name = get_id_to_name_map()
-#    champ_main_roles = get_main_roles()
-#
-#    # 2. Abfragen starten
-#    asol_synergies = get_full_team_synergy("aurelionsol", "middle", champ_main_roles, id_to_name)
-#    asol_counters = get_all_enemy_matchups("aurelionsol", "middle", champ_main_roles, id_to_name)
-#
-#    check_my_results(asol_synergies, "Synergien (Wer passt zu ASol?)")
-#    check_my_results(asol_counters, "Matchups (Gegen wen gewinnt ASol?)")
