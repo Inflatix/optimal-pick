@@ -37,6 +37,7 @@ def init_db():
             winrate REAL,
             games INTEGER,
             last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
+            delta REAL,
             PRIMARY KEY (champion1_id, role1, champion2_id, role2),
             FOREIGN KEY (champion1_id, role1) REFERENCES Champion_roles(champ_id, role) ON DELETE CASCADE,
             FOREIGN KEY (champion2_id, role2) REFERENCES Champion_roles(champ_id, role) ON DELETE CASCADE
@@ -51,6 +52,7 @@ def init_db():
             winrate REAL,
             games INTEGER,
             last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
+            delta REAL,
             PRIMARY KEY (champ1_id, role1, champ2_id, role2),
             FOREIGN KEY (champ1_id, role1) REFERENCES Champion_roles(champ_id, role) ON DELETE CASCADE ,
             FOREIGN KEY (champ2_id, role2) REFERENCES Champion_roles(champ_id, role) ON DELETE CASCADE
