@@ -67,7 +67,7 @@ def get_main_roles(rank='diamond_plus'):
 
     for champion in progress_bar:
         api_name = get_lolalytics_name(champion)
-        time.sleep(random.uniform(3.0, 4.0))
+        time.sleep(random.uniform(1.5, 3.0))
         main_roles = []
         max_pickrate = 0
         max_pickrate_role = ''
@@ -75,7 +75,7 @@ def get_main_roles(rank='diamond_plus'):
             progress_bar.set_description(f"{champion} ({lane})")
             url = f"https://a1.lolalytics.com/mega/?ep=counter&v=1&patch=30&c={api_name}&lane={lane}&tier=diamond_plus&queue=ranked&region=all"
             try:    
-                response = requests.get(url, headers=headers, timeout=10)
+                response = requests.get(url, headers=headers, timeout=20)
                 response.raise_for_status() 
                 json_data = response.json()
                 data = json_data.get("stats", {})
@@ -138,7 +138,7 @@ def get_full_team_synergy():
         url = f"https://a1.lolalytics.com/mega/?ep=build-team&v=1&patch=30&c={api_name}&lane={role}&tier=diamond_plus&queue=ranked&region=all"
 
         try:
-            response = requests.get(url, headers=headers, timeout=10)
+            response = requests.get(url, headers=headers, timeout=20)
             response.raise_for_status() 
             
             json_data = response.json()
@@ -150,13 +150,13 @@ def get_full_team_synergy():
                     partner_id = partner_data[0]
                     
                     if lane_name in champ_main_roles[partner_id]:
-                        row = (champ_id, role, partner_id, lane_name, partner_data[1], partner_data[5])
+                        row = (champ_id, role, partner_id, lane_name, partner_data[1], partner_data[5], partner_data[3])
                         insert_list.append(row) 
             
             if insert_list: 
                 database.save_synergy(insert_list)   
 
-            time.sleep(random.uniform(1.5, 3.0))
+            time.sleep(random.uniform(2.5, 4.0))
 
         except requests.exceptions.Timeout:
             progress_bar.write("Timeout")
@@ -195,10 +195,10 @@ def get_all_enemy_matchups():
 
                 try:
 
-                    response = requests.get(url,headers = headers, timeout=10)
+                    response = requests.get(url,headers = headers, timeout=20)
 
                     if response.status_code == 429: 
-                        print("\n[!] Rate Limit getroffen! Pausiere für 5 Minuten...")
+                        print("Rate Limit")
                         time.sleep(300)
 
                         continue
@@ -214,14 +214,15 @@ def get_all_enemy_matchups():
                         matchup_champ_id = counter.get("cid")
                         winrate = counter.get("vsWr")
                         games = counter.get("n")
+                        delta = counter.get("d2")
                         if lane in champ_main_roles[matchup_champ_id]:
-                            row = (champ_id, role, matchup_champ_id, lane, winrate, games)
+                            row = (champ_id, role, matchup_champ_id, lane, winrate, games, delta)
                             insert_list.append(row)
 
                     if insert_list:
                         database.save_matchup(insert_list)
                     
-                    time.sleep(random.uniform(1.5, 3.0))
+                    time.sleep(random.uniform(2.5, 4.0))
 
                 except requests.exceptions.Timeout:
                     progress_bar.write("Timeout")

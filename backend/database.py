@@ -94,8 +94,8 @@ def save_matchup(input_list):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.executemany('''
-        INSERT OR REPLACE INTO Matchups (champ1_id, role1, champ2_id, role2, winrate, games)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT OR REPLACE INTO Matchups (champ1_id, role1, champ2_id, role2, winrate, games, delta)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     ''', (input_list))
     conn.commit()
     conn.close()
@@ -105,8 +105,8 @@ def save_synergy(input_list):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.executemany('''
-        INSERT OR REPLACE INTO Synergies (champ1_id, role1, champ2_id, role2, winrate, games)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT OR REPLACE INTO Synergies (champ1_id, role1, champ2_id, role2, winrate, games, delta)
+        VALUES (?, ?, ?, ?, ?, ?. ?)
     ''', (input_list))
     conn.commit()
     conn.close()
