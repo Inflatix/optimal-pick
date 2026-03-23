@@ -233,9 +233,6 @@ def get_all_enemy_matchups():
     return
 
 
-
-
-
 if __name__ == "__main__":
     get_id_and_name()
     print("ID and Name Done")

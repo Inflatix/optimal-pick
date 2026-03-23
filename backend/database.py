@@ -108,7 +108,7 @@ def save_synergy(input_list):
     cursor = conn.cursor()
     cursor.executemany('''
         INSERT OR REPLACE INTO Synergies (champ1_id, role1, champ2_id, role2, winrate, games, delta)
-        VALUES (?, ?, ?, ?, ?, ?. ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     ''', (input_list))
     conn.commit()
     conn.close()
@@ -260,6 +260,51 @@ def get_matchup_wr(myrole, enemy_champs_and_role):
 
     cursor.execute(f"""
                     SELECT c1.name,c1.champ_id,m.winrate,m.role2
+                    FROM Champions c1 
+                    JOIN Matchups m ON c1.champ_id = m.champ1_id 
+                    JOIN Champions c2 ON c2.champ_id = m.champ2_id
+                    WHERE m.role1 = ? AND (c2.name, m.role2) IN ({pair_placeholders}) 
+                       """, [myrole] + flattened_team)
+    res = cursor.fetchall()
+    conn.close()
+    return res
+
+
+def get_synergie_delta(myrole, team_champs_and_role):
+    if not team_champs_and_role:
+        return []
+    conn = get_connection()
+    cursor = conn.cursor()
+    pair_placeholders = ", ".join(["(?, ?)"] * len(team_champs_and_role))
+
+    flattened_team = []
+    for name, role in team_champs_and_role:
+        flattened_team.extend([name, role])
+
+    cursor.execute(f"""
+                    SELECT c1.name,c1.champ_id,s.delta,s.role2
+                    FROM Champions c1 
+                    JOIN Synergies s ON c1.champ_id = s.champ1_id 
+                    JOIN Champions c2 ON c2.champ_id = s.champ2_id
+                    WHERE s.role1 = ? AND (c2.name, s.role2) IN ({pair_placeholders}) 
+                       """, [myrole] + flattened_team)
+    res = cursor.fetchall()
+    conn.close()
+    return res
+
+def get_matchup_delta(myrole, enemy_champs_and_role):
+    if not enemy_champs_and_role:
+        return []
+    conn = get_connection()
+    cursor = conn.cursor()
+    pair_placeholders = ", ".join(["(?, ?)"] * len(enemy_champs_and_role))
+
+    flattened_team = []
+    for name, role in enemy_champs_and_role:
+        flattened_team.extend([name, role])
+
+    cursor.execute(f"""
+                    SELECT c1.name,c1.champ_id,m.delta,m.role2
                     FROM Champions c1 
                     JOIN Matchups m ON c1.champ_id = m.champ1_id 
                     JOIN Champions c2 ON c2.champ_id = m.champ2_id
