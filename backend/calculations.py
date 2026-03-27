@@ -1,8 +1,10 @@
 import database
 from collections import defaultdict
 
-def get_best_pick(team_picks, enemy_picks, role, delta = False):
+def get_best_pick(team_picks, enemy_picks, role, delta):
     print(team_picks, enemy_picks)
+
+    print(delta)
 
     if delta:
         synergie_wr = database.get_synergie_delta(role, team_picks)
@@ -40,11 +42,11 @@ def calculate_weighted_average(winrates, my_role, delta):
 
             weight = weights.get(role_label, 1.0)
 
-            total_wr += weight * wr
+            if weight and wr: total_wr += weight * wr
             total_weights += weight
         
         if delta: 
-            champ_weighted_average_wr[champ_name] = total_wr
+            champ_weighted_average_wr[champ_name] = round(total_wr, 2)
 
         elif total_weights > 0:
             champ_weighted_average_wr[champ_name] = round((total_wr / total_weights),2)

@@ -20,13 +20,14 @@ def get_recommendation():
 
         raw_team = data.get("team_picks", {})
         raw_enemy = data.get("enemy_picks", {})
+        delta = data.get("delta", False)
 
         my_role = data.get("role")
         print(my_role)
         team_list = [(get_data.get_database_name(champ), role) for role, champ in raw_team.items() if champ]
         enemy_list = [(get_data.get_database_name(champ), role) for role, champ in raw_enemy.items() if champ]
     
-        best_picks = calculations.get_best_pick(team_list, enemy_list, my_role)
+        best_picks = calculations.get_best_pick(team_list, enemy_list, my_role, delta)
 
     
         return jsonify({
