@@ -21,6 +21,7 @@ const activeSlot = ref(null);
 const ROLE_NAMES = ["Top", "Jungle", "Middle", "Bottom", "Support"];
 const selectedRole = ref("all")
 const draggedSlot = ref(null);
+const delta = ref(false)
 
 
 onMounted(async () => {
@@ -75,10 +76,12 @@ const fetchRecommendations = async () => {
 
     const isTeamSide = activeSlot.value.side === 'team';
 
+
     const payload = {
       role: currentRole,
       team_picks: isTeamSide ? formatPicks(myTeam.value) : formatPicks(enemyTeam.value),
-      enemy_picks: isTeamSide ? formatPicks(enemyTeam.value) : formatPicks(myTeam.value)
+      enemy_picks: isTeamSide ? formatPicks(enemyTeam.value) : formatPicks(myTeam.value),
+      delta: delta.value
     };
   
 
@@ -119,7 +122,7 @@ const selectChampion = (champ) => {
 };
 
 const recommendedChamps = computed(() => {
-let list = allChampions.value;
+  let list = [...allChampions.value];
 
   if (selectedRole.value !== "all") {
     list = list.filter(c => c.roles.includes(selectedRole.value));
@@ -130,7 +133,15 @@ let list = allChampions.value;
       c.name.toLowerCase().includes(searchQuery.value.toLowerCase())
     );
   }
-  return list.sort((a, b) => b.score - a.score);
+  return list.sort((a, b) => {
+    if (a.score === null && b.score === null) return 0;
+    
+    if (a.score === null) return 1;
+    
+    if (b.score === null) return -1;
+    
+    return b.score - a.score;
+  }); 
 });
 
 const isPicked = (champ) => {
@@ -182,6 +193,11 @@ const handleDrop = (targetIndex, targetSide) => {
   draggedSlot.value = null;
 };
 
+const handleDeltaClick = () => {
+
+  delta.value = !delta.value; 
+  fetchRecommendations()
+}
 
 
 </script>
@@ -223,6 +239,15 @@ const handleDrop = (targetIndex, targetSide) => {
           class="w-6 h-6 object-contain"
         /> 
         </button>
+
+        <div class="w-px h-8 bg-slate-700 mx-1"></div>
+
+          <button 
+            @click="handleDeltaClick"
+            class="px-4 py-2 rounded text-[10px] font-bold uppercase tracking-widest transition-all duration-300 border h-8.5 bg-slate-800 border-slate-700 text-white hover:border-teal-500"
+          >
+            {{ delta ? 'Delta' : 'Winrate' }}
+          </button>
     </div>
 
       <div class="grid grid-cols-4 lg:grid-cols-6 gap-4 overflow-y-auto max-h-[70vh] p-2">
@@ -238,7 +263,7 @@ const handleDrop = (targetIndex, targetSide) => {
             <div 
               v-if="champ.score !== null"
               class="absolute -bottom-2 -right-2 bg-teal-600 text-[10px] px-1.5 py-0.5 rounded font-bold shadow-lg">
-              {{champ.score}}%
+              {{champ.score}}{{!delta ? '%' : '' }}
             </div>
           </div>
           <span class="text-[11px] mt-2 text-slate-400 group-hover:text-white">{{ champ.name }}</span>
